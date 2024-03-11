@@ -55,6 +55,8 @@ func ConnectToDatabase() {
 func MigrateDatabase() {
 	CreateSourceTable()
 	CreatePackageTable()
+	// CreateMaintainerTable()
+	// CreateMetricsTable()
 
 	fmt.Print("	-----> ")
 	fmt.Println(gcolor.GreenText("Database migrated."))

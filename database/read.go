@@ -1,5 +1,20 @@
 package database
 
+// import
+// cache map search_string to json
+// cache map maintianer to json
+// cache map package_string to json
+
+// create metrics table
+// count searches
+// count maintainer views
+// count package views
+// count package copies
+
+func ReadSearch(search_string string)     {}
+func ReadPackage(search_string string)    {}
+func ReadMaintainer(search_string string) {}
+
 // func ReadUser(username string) string {
 // 	row, err := connection.Query(context.Background(),
 // 		SELECT_USER,
