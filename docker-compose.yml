@@ -1,0 +1,57 @@
+version: '3.8'
+
+
+# networks:
+#   frontend:
+#   backend:
+
+services:
+  # server
+  # server:
+  #   build: .
+  #   depends_on:
+  #     database:
+  #       condition: service_healthy
+  #   ports:
+  #     - 3000:3000
+  #   # needed to keep custom terminal styling
+  #   tty: true
+  #   environment:
+  #     - TERM=xterm-256color`
+
+
+  # database
+  database:
+    image: postgres
+    restart: always
+    env_file:
+      - .env
+    ports:
+      - ${DB_PORT}:${DB_PORT}
+    environment:
+      POSTGRES_USER: ${DB_USER}
+      POSTGRES_PASSWORD: ${DB_PASSWORD}
+      POSTGRES_DB: ${DB_NAME}
+    healthcheck:
+      test: pg_isready --version
+
+  #pgadmin
+  admin:
+    image: dpage/pgadmin4
+    restart: always
+    depends_on:
+      database:
+        condition: service_healthy
+    ports:
+      - "8888:80"
+    env_file:
+      - .env
+    environment:
+      PGADMIN_DEFAULT_EMAIL: ${ADMIN_EMAIL}
+      PGADMIN_DEFAULT_PASSWORD: ${ADMIN_PASSWORD}
+    volumes:
+      - pgadmin-data:/var/lib/pgadmin
+
+volumes:
+  local_pgdata:
+  pgadmin-data:
