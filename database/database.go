@@ -3,9 +3,10 @@ package database
 import (
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"main/configs"
-	"main/handlers"
+	"net/http"
 	"os"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -53,7 +54,7 @@ func ConnectToDatabase() {
 }
 
 func MigrateDatabase() {
-	CreateSourceTable()
+	// CreateSourceTable()
 	CreatePackageTable()
 	// CreateMaintainerTable()
 	// CreateMetricsTable()
@@ -64,7 +65,7 @@ func MigrateDatabase() {
 
 func UpdateDebianList() {
 	name := "Debian"
-	list := handlers.GET_PACKAGE_LIST()
+	list := GET_PACKAGE_LIST()
 	_, err := connection.Exec(context.Background(),
 		UPSERT_SOURCES,
 		name, list,
@@ -99,4 +100,16 @@ func CreatePackageTable() {
 	}
 	fmt.Print("	-----> ")
 	fmt.Println(gcolor.YellowText("Package table created."))
+}
+
+func GET_PACKAGE_LIST() []byte {
+	response, err := http.Get("https://sources.debian.org/api/list")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	data, err := io.ReadAll(response.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+	return data
 }

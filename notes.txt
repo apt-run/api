@@ -1,18 +1,7 @@
-docker run `
-    -p 5432:5432 -d `
-    --name postgres-container `
-    -e POSTGRES_USER=dbuser  `
-    -e POSTGRES_PASSWORD=dbpassword `
-    -e POSTGRES_DB=dbname `
-    postgres `
 
-docker compose up
-    
 
-go build cmd/main.go; `
-start "C:/Users/user1/AppData/Local/Programs/pgAdmin 4/v7/runtime/pgadmin4.exe"; `
-./main.exe
+store and slice json in database
+is jsonb better for reads or writes / indexing / cache
 
-    
-go build cmd/main.go; `
-./main.exe 
+write artlice if this is smart
+

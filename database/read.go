@@ -1,5 +1,13 @@
 package database
 
+import (
+	"context"
+	"encoding/json"
+	"log"
+
+	"github.com/jackc/pgx/v5"
+)
+
 // import
 // cache map search_string to json
 // cache map maintianer to json
@@ -11,9 +19,79 @@ package database
 // count package views
 // count package copies
 
-func ReadSearch(search_string string)     {}
+func ReadSearch(search_string string) []byte {
+	rows, err := connection.Query(context.Background(),
+		SEARCH_PACKAGES,
+		search_string,
+	)
+	if err != nil {
+		log.Fatalf("Unable to query database: %v", err)
+	}
+
+	var jsonValue string
+	var jsonData map[string]interface{}
+	for rows.Next() {
+		err = rows.Scan(&jsonValue)
+		if err != nil {
+			log.Fatalf("Unable to scan json value: %v", err)
+		}
+
+		// Store the JSON value in a variable
+		if err := json.Unmarshal([]byte(jsonValue), &jsonData); err != nil {
+			log.Fatalf("Unable to unmarshal json value: %v", err)
+		}
+	}
+
+	if err = rows.Err(); err != nil {
+		log.Fatalf("Error reading rows: %v", err)
+	}
+
+	return []byte(jsonValue)
+}
 func ReadPackage(search_string string)    {}
 func ReadMaintainer(search_string string) {}
+
+func ReadPaginate(index int) []byte {
+
+	var rows pgx.Rows
+	var err error
+	if index < 1 {
+		rows, err = connection.Query(context.Background(),
+			PAGINATE_PACKAGES_START,
+		)
+		if err != nil {
+			log.Fatalf("Unable to query database: %v", err)
+		}
+	} else {
+		rows, err = connection.Query(context.Background(),
+			PAGINATE_PACKAGES,
+			index,
+		)
+		if err != nil {
+			log.Fatalf("Unable to query database: %v", err)
+		}
+	}
+
+	var jsonValue string
+	var jsonData map[string]interface{}
+	for rows.Next() {
+		err = rows.Scan(&jsonValue)
+		if err != nil {
+			log.Fatalf("Unable to scan json value: %v", err)
+		}
+
+		// Store the JSON value in a variable
+		if err := json.Unmarshal([]byte(jsonValue), &jsonData); err != nil {
+			log.Fatalf("Unable to unmarshal json value: %v", err)
+		}
+	}
+
+	if err = rows.Err(); err != nil {
+		log.Fatalf("Error reading rows: %v", err)
+	}
+
+	return []byte(jsonValue)
+}
 
 // func ReadUser(username string) string {
 // 	row, err := connection.Query(context.Background(),

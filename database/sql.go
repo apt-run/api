@@ -41,3 +41,30 @@ const DROP_TABLE_SOURCES = `
 const DROP_TABLE_PACKAGE = `
 	DROP TABLE Package;
 `
+
+const SEARCH_PACKAGES = `
+	SELECT json_build_object('packages', json_agg(value))
+	FROM (
+		SELECT value 
+		FROM sources, json_array_elements(list::json -> 'packages') AS package(value)
+		WHERE package.value->>'name' LIKE ($1 || '%')
+	) subquery;
+`
+
+const PAGINATE_PACKAGES_START = `
+	SELECT json_build_object('packages', json_agg(value))
+	FROM (
+		SELECT value
+		FROM sources, json_array_elements(sources.list::json -> 'packages')
+		LIMIT 20
+	) subquery;
+`
+
+const PAGINATE_PACKAGES = `
+	SELECT json_build_object('packages', json_agg(value))
+	FROM (
+		SELECT value
+		FROM sources, json_array_elements(sources.list::json -> 'packages')
+		LIMIT $1 OFFSET $1
+	) subquery;
+`

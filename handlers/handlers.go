@@ -5,7 +5,9 @@ import (
 	"fmt"
 	"io"
 	"log"
+	"main/database"
 	"net/http"
+	"strconv"
 )
 
 func TestRoot(w http.ResponseWriter, r *http.Request) {
@@ -14,22 +16,30 @@ func TestRoot(w http.ResponseWriter, r *http.Request) {
 }
 
 func Search(w http.ResponseWriter, r *http.Request) {
-	search_input := r.URL.Query().Get("query")
-	fmt.Println("GET query parameters were:", search_input)
+	search_query := r.URL.Query().Get("query")
+	str := r.URL.Query().Get("limit")
 
-	if len(search_input) > 50 {
+	search_limit := 0
+	var err error
+	if str != "" {
+		search_limit, err = strconv.Atoi(str)
+		if err != nil {
+			log.Fatal(err)
+		}
+	}
+
+	if len(search_query) > 50 || search_limit > 100 {
 		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, "Bad Request. Query length is too long.\n%d", len(search_input))
 		return
 	}
-	if search_input == "" {
+	if search_query == "" {
 		w.WriteHeader(http.StatusAccepted)
-		fmt.Fprint(w, len(search_input))
+		w.Write(database.ReadPaginate(search_limit))
 		return
 	}
-	if search_input != "" {
+	if search_query != "" {
 		w.WriteHeader(http.StatusAccepted)
-		w.Write(GET_PACKAGE_LIST())
+		w.Write(database.ReadSearch(search_query))
 		return
 	}
 }
@@ -66,18 +76,6 @@ func GET_PACKAGE(packag string) []byte {
 		log.Fatalln(err)
 	}
 
-	data, err := io.ReadAll(response.Body)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	return data
-}
-
-func GET_PACKAGE_LIST() []byte {
-	response, err := http.Get("https://sources.debian.org/api/list")
-	if err != nil {
-		log.Fatalln(err)
-	}
 	data, err := io.ReadAll(response.Body)
 	if err != nil {
 		log.Fatalln(err)
