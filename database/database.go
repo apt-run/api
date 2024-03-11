@@ -42,7 +42,7 @@ func ConnectToDatabase() {
 }
 
 func MigrateDatabase() {
-	CreateSourceTable()
+	// CreateSourceTable()
 	CreatePackageTable()
 	// CreateMaintainerTable()
 	// CreateMetricsTable()

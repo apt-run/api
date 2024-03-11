@@ -48,6 +48,7 @@ const SEARCH_PACKAGES = `
 		SELECT value 
 		FROM sources, json_array_elements(list::json -> 'packages') AS package(value)
 		WHERE package.value->>'name' LIKE ($1 || '%')
+		LIMIT 100
 	) subquery;
 `
 
@@ -66,5 +67,14 @@ const PAGINATE_PACKAGES = `
 		SELECT value
 		FROM sources, json_array_elements(sources.list::json -> 'packages')
 		LIMIT $1 OFFSET $1
+	) subquery;
+`
+const SEARCH_PACKAGES_PAGINATE = `
+	SELECT json_build_object('packages', json_agg(value))
+	FROM (
+		SELECT value 
+		FROM sources, json_array_elements(list::json -> 'packages') AS package(value)
+		WHERE package.value->>'name' LIKE ($1 || '%')
+		LIMIT $1 OFFSET $1	
 	) subquery;
 `

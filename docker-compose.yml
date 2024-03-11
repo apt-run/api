@@ -8,10 +8,9 @@ services:
   # server
   server:
     build: .
-    restart: always
-    # depends_on:
-    #   database:
-    #     condition: service_healthy
+    depends_on:
+      database:
+        condition: service_healthy
     ports:
       - 3000:3000
     # needed to keep custom terminal styling

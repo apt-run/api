@@ -17,6 +17,7 @@ func TestRoot(w http.ResponseWriter, r *http.Request) {
 func Search(w http.ResponseWriter, r *http.Request) {
 	search_query := r.URL.Query().Get("query")
 	str := r.URL.Query().Get("limit")
+	fmt.Println(str)
 
 	var err error
 	search_limit := 0
@@ -33,7 +34,7 @@ func Search(w http.ResponseWriter, r *http.Request) {
 	}
 	if search_query == "" {
 		w.WriteHeader(http.StatusAccepted)
-		w.Write(database.ReadPaginate(search_limit))
+		w.Write(database.ReadPaginate(20))
 		return
 	}
 	if search_query != "" {
