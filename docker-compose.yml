@@ -36,21 +36,21 @@ services:
       test: pg_isready --version
 
   #pgadmin
-  admin:
-    image: dpage/pgadmin4
-    restart: always
-    depends_on:
-      database:
-        condition: service_healthy
-    ports:
-      - "8888:80"
-    env_file:
-      - .env
-    environment:
-      PGADMIN_DEFAULT_EMAIL: ${ADMIN_EMAIL}
-      PGADMIN_DEFAULT_PASSWORD: ${ADMIN_PASSWORD}
-    volumes:
-      - pgadmin-data:/var/lib/pgadmin
+  # admin:
+  #   image: dpage/pgadmin4
+  #   restart: always
+  #   depends_on:
+  #     database:
+  #       condition: service_healthy
+  #   ports:
+  #     - "8888:80"
+  #   env_file:
+  #     - .env
+  #   environment:
+  #     PGADMIN_DEFAULT_EMAIL: ${ADMIN_EMAIL}
+  #     PGADMIN_DEFAULT_PASSWORD: ${ADMIN_PASSWORD}
+  #   volumes:
+  #     - pgadmin-data:/var/lib/pgadmin
 
 volumes:
   local_pgdata:

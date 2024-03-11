@@ -5,6 +5,7 @@ import (
 	"fmt"
 	"log"
 	"main/configs"
+	"main/handlers"
 	"os"
 
 	"github.com/jackc/pgx/v5/pgxpool"
@@ -54,8 +55,24 @@ func ConnectToDatabase() {
 func MigrateDatabase() {
 	CreateSourceTable()
 	CreatePackageTable()
+
 	fmt.Print("	-----> ")
 	fmt.Println(gcolor.GreenText("Database migrated."))
+}
+
+func UpdateDebianList() {
+	name := "Debian"
+	list := handlers.GET_PACKAGE_LIST()
+	_, err := connection.Exec(context.Background(),
+		UPSERT_SOURCES,
+		name, list,
+	)
+	if err != nil {
+		log.Fatal(err)
+	}
+
+	fmt.Print("	-----> ")
+	fmt.Println(gcolor.YellowText("Debian packages list updated."))
 }
 
 func CreateSourceTable() {
@@ -67,6 +84,8 @@ func CreateSourceTable() {
 	}
 	fmt.Print("	-----> ")
 	fmt.Println(gcolor.YellowText("Source table created."))
+
+	UpdateDebianList()
 }
 
 func CreatePackageTable() {

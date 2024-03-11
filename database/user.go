@@ -1,19 +1,5 @@
 package database
 
-// func CreateUser(username string, password string) bool {
-// 	_, err := connection.Exec(context.Background(),
-// 		INSERT_USER,
-// 		username,
-// 		password,
-// 	)
-
-// 	if err != nil {
-// 		log.Fatal(err)
-// 		return false
-// 	}
-// 	return true
-// }
-
 // func ReadUser(username string) string {
 // 	row, err := connection.Query(context.Background(),
 // 		SELECT_USER,

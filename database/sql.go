@@ -4,8 +4,7 @@ const CREATE_SOURCE_TABLE = `
 	CREATE TABLE IF NOT EXISTS Sources (
 		SourceID 	SERIAL,
 		Name 		TEXT NOT NULL UNIQUE,
-		URL 		TEXT NOT NULL UNIQUE,
-		BaseURL 	TEXT NOT NULL UNIQUE,
+		List		JSON NOT NULL,
 		PRIMARY 	KEY(SourceID)
 	);
 `
@@ -20,59 +19,25 @@ const CREATE_PACKAGE_TABLE = `
 		PRIMARY 		KEY(PackageID)
 	);
 `
-
-const DROP_TABLE_SOURCES = `
-	DROP TABLE Sourec;
+const UPSERT_SOURCES = `
+	INSERT INTO Sources (name, list)
+	VALUES ($1, $2)
+	ON CONFLICT(name) 
+	DO UPDATE SET
+		list = EXCLUDED.list;
 `
-
+const UPDATE_SOURCES = `
+	UPDATE Sources (Name, List)
+	SET List = $2
+	WHERE Name = $1;
+`
+const INSERT_SOURCES = `
+	INSERT INTO Sources (Name, List) 
+	VALUES($1, $2)
+`
+const DROP_TABLE_SOURCES = `
+	DROP TABLE Sources;
+`
 const DROP_TABLE_PACKAGE = `
 	DROP TABLE Package;
-`
-
-const INSERT_SOURCE = `
-	INSERT INTO Users (Username, Password)
-	VALUES ($1, $2); 
-`
-
-const SELECT_SOURCE = `
-	SELECT * 
-	FROM users
-	WHERE username = $1
-	ORDER BY username ASC
-	LIMIT 1
-`
-
-const UPDATE_SOURCE = `
-	UPDATE Users
-	SET Username = $1, Password = $2
-	WHERE Username = $3; 
-`
-
-const DELETE_SOURCE = `
-	DELETE FROM Users 
-	WHERE Username = $1;
-`
-
-const INSERT_PACKAGE = `
-	INSERT INTO Users (Username, Password)
-	VALUES ($1, $2); 
-`
-
-const SELECT_PACKAGE = `
-	SELECT * 
-	FROM users
-	WHERE username = $1
-	ORDER BY username ASC
-	LIMIT 1
-`
-
-const UPDATE_PACKAGE = `
-	UPDATE Users
-	SET Username = $1, Password = $2
-	WHERE Username = $3; 
-`
-
-const DELETE_PACKAGE = `
-	DELETE FROM Users 
-	WHERE Username = $1;
 `
