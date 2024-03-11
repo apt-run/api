@@ -16,13 +16,12 @@ func TestRoot(w http.ResponseWriter, r *http.Request) {
 
 func Search(w http.ResponseWriter, r *http.Request) {
 	search_query := r.URL.Query().Get("query")
-	str := r.URL.Query().Get("limit")
-	fmt.Println(str)
-
-	var err error
+	limit := r.URL.Query().Get("limit")
 	search_limit := 0
-	if str != "" {
-		search_limit, err = strconv.Atoi(str)
+	var err error
+
+	if limit != "" {
+		search_limit, err = strconv.Atoi(limit)
 		if err != nil {
 			log.Fatal(err)
 		}
@@ -32,14 +31,15 @@ func Search(w http.ResponseWriter, r *http.Request) {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
+
 	if search_query == "" {
 		w.WriteHeader(http.StatusAccepted)
-		w.Write(database.ReadPaginate(20))
+		w.Write(database.ReadPaginate(search_limit))
 		return
 	}
 	if search_query != "" {
 		w.WriteHeader(http.StatusAccepted)
-		w.Write(database.ReadSearch(search_query))
+		w.Write(database.ReadSearch(search_query, search_limit))
 		return
 	}
 }

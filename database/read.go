@@ -8,13 +8,27 @@ import (
 	"github.com/jackc/pgx/v5"
 )
 
-func ReadSearch(search_string string) []byte {
-	rows, err := connection.Query(context.Background(),
-		SEARCH_PACKAGES,
-		search_string,
-	)
-	if err != nil {
-		log.Fatalf("Unable to query database: %v", err)
+func ReadSearch(search_string string, limit int) []byte {
+	var err error
+	var rows pgx.Rows
+	if limit > 0 {
+		rows, err = connection.Query(context.Background(),
+			SEARCH_PACKAGES,
+			search_string,
+			limit,
+		)
+		if err != nil {
+			log.Fatalf("Unable to query database: %v", err)
+		}
+	} else {
+		rows, err = connection.Query(context.Background(),
+			SEARCH_PACKAGES,
+			search_string,
+			20,
+		)
+		if err != nil {
+			log.Fatalf("Unable to query database: %v", err)
+		}
 	}
 
 	var jsonValue string

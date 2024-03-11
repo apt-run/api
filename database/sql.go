@@ -20,20 +20,11 @@ const CREATE_PACKAGE_TABLE = `
 	);
 `
 const UPSERT_SOURCES = `
-	INSERT INTO Sources (name, list)
+	INSERT INTO sources (name, list)
 	VALUES ($1, $2)
 	ON CONFLICT(name) 
 	DO UPDATE SET
 		list = EXCLUDED.list;
-`
-const UPDATE_SOURCES = `
-	UPDATE Sources (Name, List)
-	SET List = $2
-	WHERE Name = $1;
-`
-const INSERT_SOURCES = `
-	INSERT INTO Sources (Name, List) 
-	VALUES($1, $2)
 `
 const DROP_TABLE_SOURCES = `
 	DROP TABLE Sources;
@@ -41,14 +32,13 @@ const DROP_TABLE_SOURCES = `
 const DROP_TABLE_PACKAGE = `
 	DROP TABLE Package;
 `
-
 const SEARCH_PACKAGES = `
 	SELECT json_build_object('packages', json_agg(value))
 	FROM (
 		SELECT value 
-		FROM sources, json_array_elements(list::json -> 'packages') AS package(value)
+		FROM sources, json_array_elements(sources.list::json -> 'packages') AS package(value)
 		WHERE package.value->>'name' LIKE ($1 || '%')
-		LIMIT 100
+		LIMIT $2
 	) subquery;
 `
 
@@ -69,6 +59,7 @@ const PAGINATE_PACKAGES = `
 		LIMIT $1 OFFSET $1
 	) subquery;
 `
+
 const SEARCH_PACKAGES_PAGINATE = `
 	SELECT json_build_object('packages', json_agg(value))
 	FROM (
