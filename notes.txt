@@ -5,3 +5,15 @@ is jsonb better for reads or writes / indexing / cache
 
 write artlice if this is smart
 
+
+
+// import
+// cache map search_string to json
+// cache map maintianer to json
+// cache map package_string to json
+
+// create metrics table
+// count searches
+// count maintainer views
+// count package views
+// count package copies

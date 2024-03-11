@@ -3,7 +3,6 @@ package handlers
 import (
 	"encoding/json"
 	"fmt"
-	"io"
 	"log"
 	"main/database"
 	"net/http"
@@ -19,8 +18,8 @@ func Search(w http.ResponseWriter, r *http.Request) {
 	search_query := r.URL.Query().Get("query")
 	str := r.URL.Query().Get("limit")
 
-	search_limit := 0
 	var err error
+	search_limit := 0
 	if str != "" {
 		search_limit, err = strconv.Atoi(str)
 		if err != nil {
@@ -69,42 +68,3 @@ func Package(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 }
-
-func GET_PACKAGE(packag string) []byte {
-	response, err := http.Get("https://sources.debian.org/src/" + packag)
-	if err != nil {
-		log.Fatalln(err)
-	}
-
-	data, err := io.ReadAll(response.Body)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	return data
-}
-
-// // Initialize a new Attrs struct and add some values.
-// attrs := new(Attrs)
-// attrs.Name = "Pesto"
-// attrs.Ingredients = []string{"Basil", "Garlic", "Parmesan", "Pine nuts", "Olive oil"}
-// attrs.Organic = false
-// attrs.Dimensions.Weight = 100.00
-
-// // The database driver will call the Value() method and and marshall the
-// // attrs struct to JSON before the INSERT.
-// _, err = db.Exec("INSERT INTO items (attrs) VALUES($1)", attrs)
-// if err != nil {
-//     log.Fatal(err)
-// }
-
-// // Similarly, we can also fetch data from the database, and the driver
-// // will call the Scan() method to unmarshal the data to an Attr struct.
-// item := new(Item)
-// err = db.QueryRow("SELECT id, attrs FROM items ORDER BY id DESC LIMIT 1").Scan(&item.ID, &item.Attrs)
-// if err != nil {
-//     log.Fatal(err)
-// }
-
-// // You can then use the struct fields as normal...
-// weightKg := item.Attrs.Dimensions.Weight / 1000
-// log.Printf("Item: %d, Name: %s, Weight: %.2fkg", item.ID, item.Attrs.Name, weightKg)
