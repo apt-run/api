@@ -37,6 +37,7 @@ func ConnectToDatabase() {
 		)
 		os.Exit(1)
 	}
+
 	fmt.Print("	-----> ")
 	fmt.Println(gcolor.GreenText("Connected to database."))
 }
@@ -44,6 +45,7 @@ func ConnectToDatabase() {
 func MigrateDatabase() {
 	CreateSourceTable()
 	CreatePackageTable()
+
 	fmt.Print("	-----> ")
 	fmt.Println(gcolor.GreenText("Database migrated."))
 }
@@ -91,6 +93,7 @@ func CreatePackageTable() {
 	if err != nil {
 		log.Fatal(err)
 	}
+
 	fmt.Print("	-----> ")
 	fmt.Println(gcolor.YellowText("Package table created."))
 }

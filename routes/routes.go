@@ -24,7 +24,7 @@ func SetupRoutes() {
 	}
 
 	fmt.Print("\n=> http server started on ")
-	fmt.Println(gcolor.GreenText("localhost" + server.Addr))
+	fmt.Println(gcolor.GreenText("http://localhost" + server.Addr))
 	fmt.Println()
 
 	server.ListenAndServe()

@@ -88,6 +88,3 @@ func ReadList(index int) []byte {
 
 	return []byte(jsonValue)
 }
-
-func ReadPackage(search_string string)    {}
-func ReadMaintainer(search_string string) {}
