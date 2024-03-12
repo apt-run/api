@@ -10,6 +10,7 @@ import (
 )
 
 func TestRoot(w http.ResponseWriter, r *http.Request) {
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	w.WriteHeader(http.StatusOK)
 	fmt.Fprint(w, "Ping")
 }
@@ -32,6 +33,7 @@ func Search(w http.ResponseWriter, r *http.Request) {
 		return
 	}
 
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	if search_query == "" {
 		w.WriteHeader(http.StatusAccepted)
 		w.Write(database.ReadPaginate(search_limit))
@@ -58,6 +60,8 @@ func Package(w http.ResponseWriter, r *http.Request) {
 		fmt.Fprint(w, len(packag))
 		return
 	}
+
+	w.Header().Set("Access-Control-Allow-Origin", "*")
 	if packag != "" {
 		w.WriteHeader(http.StatusAccepted)
 		json.NewEncoder(w).Encode(map[string]interface{}{
