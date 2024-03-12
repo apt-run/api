@@ -2,7 +2,6 @@ package handlers
 
 import (
 	"fmt"
-	"log"
 	"main/database"
 	"net/http"
 	"strconv"
@@ -23,7 +22,7 @@ func Search(w http.ResponseWriter, r *http.Request) {
 	if limit != "" {
 		search_limit, err = strconv.Atoi(limit)
 		if err != nil {
-			log.Fatal(err)
+			fmt.Println(err.Error())
 		}
 	}
 
@@ -46,7 +45,17 @@ func Search(w http.ResponseWriter, r *http.Request) {
 }
 
 func Package(w http.ResponseWriter, r *http.Request) {
+	packag := r.URL.Query().Get("package")
+	// version := r.URL.Query().Get("version")
+
+	if len(packag) > 50 || packag == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
+
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	w.WriteHeader(http.StatusOK)
-	fmt.Fprint(w, "Ping")
+	if packag != "" {
+		w.WriteHeader(http.StatusAccepted)
+		return
+	}
 }

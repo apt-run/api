@@ -1,0 +1,26 @@
+{
+  "query": "code",
+  "results": {
+    "exact": null,
+    "other": [
+      { "name": "amd64-microcode" },
+      { "name": "astc-encoder" },
+      { "name": "baconqrcode" },
+      { "name": "barcode" },
+      { "name": "transdecoder" },
+      { "name": "translitcodec" },
+      { "name": "ttf-junicode" },
+      { "name": "unibetacode" },
+      { "name": "unicode" },
+      { "name": "unicode-cldr-core" },
+      { "name": "unicode-data" },
+      { "name": "unicode-idna" },
+      { "name": "unicode-screensaver" },
+      { "name": "unidecode" },
+      { "name": "xfonts-efont-unicode" },
+      { "name": "yencode" },
+      { "name": "yydecode" }
+    ]
+  },
+  "suite": ""
+}
