@@ -19,6 +19,41 @@ const CREATE_PACKAGE_TABLE = `
 		primary 		key(packageid)
 	);
 `
+
+const CREATE_STATS_TABLE = `
+	create table if not exists stats (
+		packageid 		serial,
+		rank 			integer not null,
+		name 			text not null,
+		installs 		integer not null,
+		vote 			integer not null,
+		old 			integer not null,
+		recent 			integer not null,
+		nofiles 		integer not null,
+		maintainer 		text not null,
+		primary 		key(packageid)
+	);
+`
+
+const INSERT_STATS = `
+	insert into stats (rank, name, installs, vote, old, recent, nofiles, maintainer)
+	values ($1, $2, $3, $4, $5, $6, $7, $8)
+`
+
+const UPSERT_STATS = `
+	insert into stats (rank, name, installs, vote, old, recent, nofiles, maintainer)
+	values ($1, $2, $3, $4, $5, $6, $7, $8)
+	on conflict (name) 
+	do update set
+		rank = excluded.rank,
+		installs = excluded.installs,
+		vote = excluded.vote,
+		old = excluded.old,
+		recent = excluded.recent,
+		nofiles = excluded.nofiles,
+		maintainer = excluded.maintainer;
+`
+
 const UPSERT_SOURCES = `
 	insert into sources (name, list)
 	values ($1, $2)
@@ -31,6 +66,9 @@ const DROP_TABLE_SOURCES = `
 `
 const DROP_TABLE_PACKAGE = `
 	drop table package;
+`
+const DROP_TABLE_STATS = `
+	drop table stats;
 `
 
 const SEARCH_PACKAGES = `

@@ -3,6 +3,7 @@ package handlers
 import (
 	"fmt"
 	"main/database"
+	"main/utils"
 	"net/http"
 	"strconv"
 )
@@ -56,6 +57,7 @@ func Package(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	if packag != "" {
 		w.WriteHeader(http.StatusAccepted)
+		w.Write(utils.GetPackageMetrics("golang", "2:1.6.1-2"))
 		return
 	}
 }
