@@ -21,9 +21,6 @@ func SetupRoutes() {
 	server := &http.Server{
 		Addr:    ":3000",
 		Handler: mux,
-		// IdleTimeout:  time.Minute,
-		// ReadTimeout:  10 * time.Second,
-		// WriteTimeout: 30 * time.Second,
 	}
 
 	fmt.Print("\n=> http server started on ")

@@ -50,7 +50,7 @@ func ReadSearch(search_string string, limit int) []byte {
 	return []byte(jsonValue)
 }
 
-func ReadPaginate(index int) []byte {
+func ReadList(index int) []byte {
 	var err error
 	var rows pgx.Rows
 	if index < 1 {

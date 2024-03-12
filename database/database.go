@@ -44,19 +44,24 @@ func ConnectToDatabase() {
 func MigrateDatabase() {
 	CreateSourceTable()
 	CreatePackageTable()
-	// CreateMaintainerTable()
-	// CreateMetricsTable()
-
 	fmt.Print("	-----> ")
 	fmt.Println(gcolor.GreenText("Database migrated."))
 }
 
 func UpdateDebianList() {
 	name := "Debian"
-	list := GET_PACKAGE_LIST()
-	_, err := connection.Exec(context.Background(),
+	response, err := http.Get("https://sources.debian.org/api/list")
+	if err != nil {
+		log.Fatalln(err)
+	}
+	data, err := io.ReadAll(response.Body)
+	if err != nil {
+		log.Fatalln(err)
+	}
+
+	_, err = connection.Exec(context.Background(),
 		UPSERT_SOURCES,
-		name, list,
+		name, data,
 	)
 	if err != nil {
 		log.Fatal(err)
@@ -88,16 +93,4 @@ func CreatePackageTable() {
 	}
 	fmt.Print("	-----> ")
 	fmt.Println(gcolor.YellowText("Package table created."))
-}
-
-func GET_PACKAGE_LIST() []byte {
-	response, err := http.Get("https://sources.debian.org/api/list")
-	if err != nil {
-		log.Fatalln(err)
-	}
-	data, err := io.ReadAll(response.Body)
-	if err != nil {
-		log.Fatalln(err)
-	}
-	return data
 }

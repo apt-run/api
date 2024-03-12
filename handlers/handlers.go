@@ -1,7 +1,6 @@
 package handlers
 
 import (
-	"encoding/json"
 	"fmt"
 	"log"
 	"main/database"
@@ -36,7 +35,7 @@ func Search(w http.ResponseWriter, r *http.Request) {
 	w.Header().Set("Access-Control-Allow-Origin", "*")
 	if search_query == "" {
 		w.WriteHeader(http.StatusAccepted)
-		w.Write(database.ReadPaginate(search_limit))
+		w.Write(database.ReadList(search_limit))
 		return
 	}
 	if search_query != "" {
@@ -47,29 +46,7 @@ func Search(w http.ResponseWriter, r *http.Request) {
 }
 
 func Package(w http.ResponseWriter, r *http.Request) {
-	packag := r.URL.Query().Get("query")
-	fmt.Println("GET query parameters were:", packag)
-
-	if len(packag) > 50 {
-		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprintf(w, "Bad Request. Query length is too long.\n%d", len(packag))
-		return
-	}
-	if packag == "" {
-		w.WriteHeader(http.StatusBadRequest)
-		fmt.Fprint(w, len(packag))
-		return
-	}
-
 	w.Header().Set("Access-Control-Allow-Origin", "*")
-	if packag != "" {
-		w.WriteHeader(http.StatusAccepted)
-		json.NewEncoder(w).Encode(map[string]interface{}{
-			"statusCode": 200,
-			"source":     "debian",
-			"package":    packag,
-			"data":       "json",
-		})
-		return
-	}
+	w.WriteHeader(http.StatusOK)
+	fmt.Fprint(w, "Ping")
 }
