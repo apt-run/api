@@ -1,5 +1,4 @@
 # gpt wizardry
-# select x packages from list
 
 # 1
 SELECT json_build_object('packages', json_agg(value))
