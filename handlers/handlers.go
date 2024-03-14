@@ -3,9 +3,7 @@ package handlers
 import (
 	"fmt"
 	"main/database"
-	"main/utils"
 	"net/http"
-	"strconv"
 )
 
 func TestRoot(w http.ResponseWriter, r *http.Request) {
@@ -16,48 +14,39 @@ func TestRoot(w http.ResponseWriter, r *http.Request) {
 
 func Search(w http.ResponseWriter, r *http.Request) {
 	search_query := r.URL.Query().Get("query")
-	limit := r.URL.Query().Get("limit")
-	search_limit := 0
-	var err error
 
-	if limit != "" {
-		search_limit, err = strconv.Atoi(limit)
-		if err != nil {
-			fmt.Println(err.Error())
-		}
-	}
-
-	if len(search_query) > 50 || search_limit > 100 {
+	if len(search_query) > 50 {
 		w.WriteHeader(http.StatusBadRequest)
 		return
 	}
 
 	w.Header().Set("Access-Control-Allow-Origin", "*")
+	w.Header().Set("Content-Type", "application/json")
 	if search_query == "" {
 		w.WriteHeader(http.StatusAccepted)
-		w.Write(database.ReadList(search_limit))
+		w.Write(database.ReadByName(search_query, 20))
 		return
 	}
 	if search_query != "" {
 		w.WriteHeader(http.StatusAccepted)
-		w.Write(database.ReadSearch(search_query, search_limit))
+		w.Write(database.ReadByName(search_query, 20))
 		return
 	}
 }
 
-func Package(w http.ResponseWriter, r *http.Request) {
-	packag := r.URL.Query().Get("package")
-	// version := r.URL.Query().Get("version")
+// func Package(w http.ResponseWriter, r *http.Request) {
+// 	packag := r.URL.Query().Get("package")
+// 	// version := r.URL.Query().Get("version")
 
-	if len(packag) > 50 || packag == "" {
-		w.WriteHeader(http.StatusBadRequest)
-		return
-	}
+// 	if len(packag) > 50 || packag == "" {
+// 		w.WriteHeader(http.StatusBadRequest)
+// 		return
+// 	}
 
-	w.Header().Set("Access-Control-Allow-Origin", "*")
-	if packag != "" {
-		w.WriteHeader(http.StatusAccepted)
-		w.Write(utils.GetPackageMetrics("golang", "2:1.6.1-2"))
-		return
-	}
-}
+// 	w.Header().Set("Access-Control-Allow-Origin", "*")
+// 	if packag != "" {
+// 		w.WriteHeader(http.StatusAccepted)
+// 		w.Write(utils.GetPackageMetrics("golang", "2:1.6.1-2"))
+// 		return
+// 	}
+// }

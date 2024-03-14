@@ -19,7 +19,6 @@ const CREATE_PACKAGE_TABLE = `
 		primary 		key(packageid)
 	);
 `
-
 const CREATE_STATS_TABLE = `
 	create table if not exists stats (
 		packageid 		serial,
@@ -34,33 +33,6 @@ const CREATE_STATS_TABLE = `
 		primary 		key(packageid)
 	);
 `
-
-const INSERT_STATS = `
-	insert into stats (rank, name, installs, vote, old, recent, nofiles, maintainer)
-	values ($1, $2, $3, $4, $5, $6, $7, $8)
-`
-
-const UPSERT_STATS = `
-	insert into stats (rank, name, installs, vote, old, recent, nofiles, maintainer)
-	values ($1, $2, $3, $4, $5, $6, $7, $8)
-	on conflict (name) 
-	do update set
-		rank = excluded.rank,
-		installs = excluded.installs,
-		vote = excluded.vote,
-		old = excluded.old,
-		recent = excluded.recent,
-		nofiles = excluded.nofiles,
-		maintainer = excluded.maintainer;
-`
-
-const UPSERT_SOURCES = `
-	insert into sources (name, list)
-	values ($1, $2)
-	on conflict(name) 
-	do update set
-		list = excluded.list;
-`
 const DROP_TABLE_SOURCES = `
 	drop table sources;
 `
@@ -69,6 +41,67 @@ const DROP_TABLE_PACKAGE = `
 `
 const DROP_TABLE_STATS = `
 	drop table stats;
+`
+const INSERT_STATS = `
+	insert into stats (rank, name, installs, vote, old, recent, nofiles, maintainer)
+	values ($1, $2, $3, $4, $5, $6, $7, $8)
+`
+const SELECT_NAMES = `
+	select json_build_object('results', 
+			jsonb_agg(json_build_object(
+				'name', subquery.name,
+				'installs', subquery.installs,
+				'maintainer', subquery.maintainer))) as results
+	from (
+		select 
+			to_jsonb(stats.name) as name,
+			to_jsonb(stats.installs) as installs,
+			to_jsonb(stats.maintainer) as maintainer
+		from stats
+		where name like ($1 || '%')
+		order by name 
+		limit $2
+	) as subquery;
+`
+const SELECT_INSTALLS = `
+	select json_build_object('results', 
+			jsonb_agg(json_build_object(
+				'name', subquery.name,
+				'installs', subquery.installs,
+				'maintainer', subquery.maintainer))) as results
+	from (
+		select 
+			to_jsonb(stats.name) as name,
+			to_jsonb(stats.installs) as installs,
+			to_jsonb(stats.maintainer) as maintainer
+		from stats
+		order by installs desc
+		limit $1
+	) as subquery;
+`
+const SELECT_MAINTAINERS = `
+	select json_build_object('results', 
+			jsonb_agg(json_build_object(
+				'name', subquery.name,
+				'installs', subquery.installs,
+				'maintainer', subquery.maintainer))) as results
+	from (
+		select 
+			to_jsonb(stats.name) as name,
+			to_jsonb(stats.installs) as installs,
+			to_jsonb(stats.maintainer) as maintainer
+		from stats
+		where maintainers like ($1 || '%')
+		order by maintainers 
+		limit $2
+	) as subquery;
+`
+const UPSERT_SOURCES = `
+	insert into sources (name, list)
+	values ($1, $2)
+	on conflict(name) 
+	do update set
+		list = excluded.list;
 `
 
 const SEARCH_PACKAGES = `

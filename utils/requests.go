@@ -6,6 +6,8 @@ import (
 	"net/http"
 )
 
+// Debian Requests
+
 func GetPackage(packag string) []byte {
 	response, err := http.Get("https://sources.debian.org/api/src/" + packag)
 	if err != nil {
