@@ -11,6 +11,9 @@ const CREATE_STATS_TABLE = `
 		recent 			integer not null,
 		nofiles 		integer not null,
 		maintainer 		text not null,
+		url				text,
+		versions		jsonb,
+		description		text,
 		primary 		key(packageid)
 	);
 `
