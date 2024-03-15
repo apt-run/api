@@ -6,17 +6,18 @@ version: '3.8'
 
 services:
   # server
-  server:
-    build: .
-    depends_on:
-      database:
-        condition: service_healthy
-    ports:
-      - 3000:3000
-    # needed to keep custom terminal styling
-    tty: true
-    environment:
-      - TERM=xterm-256color`
+  # server:
+  #   build: .
+  #   depends_on:
+  #     database:
+  #       condition: service_healthy
+  #   ports:
+  #     - 3000:3000
+  #   # needed to keep custom terminal styling
+  #   tty: true
+  #   environment:
+  #     - TERM=xterm-256color`
+
   # database
   database:
     image: postgres

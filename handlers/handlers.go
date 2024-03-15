@@ -13,7 +13,7 @@ func TestRoot(w http.ResponseWriter, r *http.Request) {
 }
 
 func Search(w http.ResponseWriter, r *http.Request) {
-	search_query := r.URL.Query().Get("query")
+	search_query := r.URL.Query().Get("name")
 
 	if len(search_query) > 50 {
 		w.WriteHeader(http.StatusBadRequest)
@@ -36,7 +36,6 @@ func Search(w http.ResponseWriter, r *http.Request) {
 
 func Package(w http.ResponseWriter, r *http.Request) {
 	packag := r.URL.Query().Get("package")
-	// version := r.URL.Query().Get("version")
 
 	if len(packag) > 50 || packag == "" {
 		w.WriteHeader(http.StatusBadRequest)

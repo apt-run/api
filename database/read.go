@@ -3,6 +3,7 @@ package database
 import (
 	"context"
 	"encoding/json"
+	"fmt"
 	"log"
 
 	"github.com/jackc/pgx/v5"
@@ -65,6 +66,9 @@ func ReadByInstalls(limit int) []byte {
 
 func ReadByName(name string, limit int) []byte {
 	var rows pgx.Rows
+	fmt.Println(name)
+	fmt.Println("name")
+
 	rows, err := connection.Query(context.Background(),
 		SELECT_NAMES,
 		name,
