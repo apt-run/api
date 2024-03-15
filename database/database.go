@@ -4,9 +4,10 @@ import (
 	"bufio"
 	"context"
 	"fmt"
+	"io"
 	"log"
 	"main/configs"
-	"main/utils"
+	"net/http"
 	"os"
 	"strconv"
 	"strings"
@@ -46,37 +47,10 @@ func ConnectToDatabase() {
 }
 
 func MigrateDatabase() {
-	// CreateSourceTable()
-	// CreatePackageTable()
 	// CreateStatsTable()
 
 	fmt.Print("	-----> ")
 	fmt.Println(gcolor.GreenText("Database migrated."))
-}
-
-func CreateSourceTable() {
-	_, err := connection.Exec(context.Background(),
-		CREATE_SOURCE_TABLE,
-	)
-	if err != nil {
-		log.Fatal(err)
-	}
-	fmt.Print("	-----> ")
-	fmt.Println(gcolor.YellowText("Table sources created."))
-
-	UpdateDebianList()
-}
-
-func CreatePackageTable() {
-	_, err := connection.Exec(context.Background(),
-		CREATE_PACKAGE_TABLE,
-	)
-	if err != nil {
-		log.Fatal(err)
-	}
-
-	fmt.Print("	-----> ")
-	fmt.Println(gcolor.YellowText("Table package created."))
 }
 
 func CreateStatsTable() {
@@ -94,28 +68,18 @@ func CreateStatsTable() {
 	InsertDebianStats()
 }
 
-func UpdateDebianList() {
-	name := "Debian"
-	list := utils.GetList()
-
-	_, err := connection.Exec(context.Background(),
-		UPSERT_SOURCES,
-		name, list,
-	)
-	if err != nil {
-		log.Fatal(err)
-	}
+func InsertDebianStats() {
+	url := "https://popcon.debian.org/by_inst"
+	filepath := "tmp/by_inst.txt"
 
 	fmt.Print("	-----> ")
-	fmt.Println(gcolor.YellowText("Debian sources updated."))
-}
-
-// add progress and time to complete
-func InsertDebianStats() {
-	err := utils.DownloadFile("tmp/by_inst.txt", "https://popcon.debian.org/by_inst")
+	fmt.Println(gcolor.YellowText("Downloading " + url + "..."))
+	err := DownloadFile(filepath, url)
 	if err != nil {
 		fmt.Println(err.Error())
 	}
+	fmt.Print("	-----> ")
+	fmt.Println(gcolor.GreenText("Finished downloading file :" + filepath))
 
 	file, err := os.Open("tmp/by_inst.txt")
 	if err != nil {
@@ -205,8 +169,38 @@ func DeleteStatsTable() {
 		fmt.Println(err.Error())
 	}
 
-	// process tmp/data.txt
 	fmt.Print("	-----> ")
 	fmt.Println(gcolor.RedText("Table stats dropped."))
 
+}
+
+func DownloadFile(filepath string, url string) (err error) {
+
+	// Create the file
+	out, err := os.Create(filepath)
+	if err != nil {
+		return err
+	}
+	defer out.Close()
+
+	// Get the data
+	resp, err := http.Get(url)
+	if err != nil {
+		return err
+	}
+	defer resp.Body.Close()
+
+	// Check server response
+	if resp.StatusCode != http.StatusOK {
+		return fmt.Errorf("bad status: %s", resp.Status)
+	}
+
+	// Writer the body to file
+	_, err = io.Copy(out, resp.Body)
+	if err != nil {
+		return err
+	}
+
+	fmt.Println(gcolor.GreenText("File downloaded: " + filepath))
+	return nil
 }

@@ -34,19 +34,18 @@ func Search(w http.ResponseWriter, r *http.Request) {
 	}
 }
 
-// func Package(w http.ResponseWriter, r *http.Request) {
-// 	packag := r.URL.Query().Get("package")
-// 	// version := r.URL.Query().Get("version")
+func Package(w http.ResponseWriter, r *http.Request) {
+	packag := r.URL.Query().Get("package")
+	// version := r.URL.Query().Get("version")
 
-// 	if len(packag) > 50 || packag == "" {
-// 		w.WriteHeader(http.StatusBadRequest)
-// 		return
-// 	}
+	if len(packag) > 50 || packag == "" {
+		w.WriteHeader(http.StatusBadRequest)
+		return
+	}
 
-// 	w.Header().Set("Access-Control-Allow-Origin", "*")
-// 	if packag != "" {
-// 		w.WriteHeader(http.StatusAccepted)
-// 		w.Write(utils.GetPackageMetrics("golang", "2:1.6.1-2"))
-// 		return
-// 	}
-// }
+	w.Header().Set("Access-Control-Allow-Origin", "*")
+	if packag != "" {
+		w.WriteHeader(http.StatusAccepted)
+		return
+	}
+}

@@ -14,7 +14,7 @@ func SetupRoutes() {
 	mux := http.NewServeMux()
 	mux.HandleFunc("/", loghttp.Logger(handlers.TestRoot))
 	mux.HandleFunc("/search", loghttp.Logger(handlers.Search))
-	// mux.HandleFunc("/package", loghttp.Logger(handlers.Package))
+	mux.HandleFunc("/package", loghttp.Logger(handlers.Package))
 	// mux.HandleFunc("/sponsored", loghttp.Logger(handlers.TestRoot))
 	// mux.HandleFunc("/popular", loghttp.Logger(handlers.TestRoot))
 
