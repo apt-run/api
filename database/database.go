@@ -73,7 +73,7 @@ func InsertDebianStats() {
 	filepath := "tmp/by_inst.txt"
 
 	if err := os.Mkdir("temp", 0777); err != nil {
-		log.Fatalf(err.Error())
+		fmt.Println(err.Error())
 	}
 	fmt.Print("	-----> ")
 	fmt.Println(gcolor.YellowText("Directory created: tmp"))
