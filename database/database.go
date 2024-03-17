@@ -72,6 +72,12 @@ func InsertDebianStats() {
 	url := "https://popcon.debian.org/by_inst"
 	filepath := "tmp/by_inst.txt"
 
+	if err := os.Mkdir("temp", 0777); err != nil {
+		log.Fatalf(err.Error())
+	}
+	fmt.Print("	-----> ")
+	fmt.Println(gcolor.YellowText("Directory created: temp"))
+
 	fmt.Print("	-----> ")
 	fmt.Println(gcolor.YellowText("Downloading " + url + "..."))
 	err := DownloadFile(filepath, url)
