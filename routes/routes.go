@@ -19,7 +19,7 @@ func SetupRoutes() {
 	// mux.HandleFunc("/popular", loghttp.Logger(handlers.TestRoot))
 
 	server := &http.Server{
-		Addr:    ":3000",
+		Addr:    ":80",
 		Handler: mux,
 	}
 
