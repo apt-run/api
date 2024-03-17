@@ -87,7 +87,7 @@ func InsertDebianStats() {
 	fmt.Print("	-----> ")
 	fmt.Println(gcolor.GreenText("Finished downloading file :" + filepath))
 
-	file, err := os.Open("tmp/by_inst.txt")
+	file, err := os.Open("tmp/by_inst")
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
