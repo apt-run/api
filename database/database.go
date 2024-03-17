@@ -70,9 +70,9 @@ func CreateStatsTable() {
 
 func InsertDebianStats() {
 	url := "https://popcon.debian.org/by_inst"
-	filepath := "tmp/by_inst"
+	filepath := "tmp/by_inst.txt"
 
-	if err := os.Mkdir("temp", 0777); err != nil {
+	if err := os.Mkdir("tmp", 0777); err != nil {
 		fmt.Println(err.Error())
 	}
 	fmt.Print("	-----> ")
@@ -87,7 +87,7 @@ func InsertDebianStats() {
 	fmt.Print("	-----> ")
 	fmt.Println(gcolor.GreenText("Finished downloading file :" + filepath))
 
-	file, err := os.Open("tmp/by_inst")
+	file, err := os.Open("tmp/by_inst.txt")
 	if err != nil {
 		log.Fatalf(err.Error())
 	}
