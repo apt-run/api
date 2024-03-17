@@ -17,21 +17,21 @@ func ReadByMaintianer(maintainer string, limit int) []byte {
 		limit,
 	)
 	if err != nil {
-		log.Fatalf("Unable to query database: %v", err)
+		log.Printf("Unable to query database: %v", err)
 	}
 
 	var jsonValue string
 	var jsonData map[string]interface{}
 	for rows.Next() {
 		if err := rows.Scan(&jsonValue); err != nil {
-			log.Fatalf("Unable to scan json value: %v", err)
+			log.Printf("Unable to scan json value: %v", err)
 		}
 		if err := json.Unmarshal([]byte(jsonValue), &jsonData); err != nil {
-			log.Fatalf("Unable to unmarshal json value: %v", err)
+			log.Printf("Unable to unmarshal json value: %v", err)
 		}
 	}
 	if err := rows.Err(); err != nil {
-		log.Fatalf("Error reading rows: %v", err)
+		log.Printf("Error reading rows: %v", err)
 	}
 
 	return []byte(jsonValue)
@@ -44,21 +44,21 @@ func ReadByInstalls(limit int) []byte {
 		limit,
 	)
 	if err != nil {
-		log.Fatalf("Unable to query database: %v", err)
+		log.Printf("Unable to query database: %v", err)
 	}
 
 	var jsonValue string
 	var jsonData map[string]interface{}
 	for rows.Next() {
 		if err := rows.Scan(&jsonValue); err != nil {
-			log.Fatalf("Unable to scan json value: %v", err)
+			log.Printf("Unable to scan json value: %v", err)
 		}
 		if err := json.Unmarshal([]byte(jsonValue), &jsonData); err != nil {
-			log.Fatalf("Unable to unmarshal json value: %v", err)
+			log.Printf("Unable to unmarshal json value: %v", err)
 		}
 	}
 	if err := rows.Err(); err != nil {
-		log.Fatalf("Error reading rows: %v", err)
+		log.Printf("Error reading rows: %v", err)
 	}
 
 	return []byte(jsonValue)
@@ -75,21 +75,21 @@ func ReadByName(name string, limit int) []byte {
 		limit,
 	)
 	if err != nil {
-		log.Fatalf("Unable to query database: %v", err)
+		log.Printf("Unable to query database: %v", err)
 	}
 
 	var jsonValue string
 	var jsonData map[string]interface{}
 	for rows.Next() {
 		if err := rows.Scan(&jsonValue); err != nil {
-			log.Fatalf("Unable to scan json value: %v", err)
+			log.Printf("Unable to scan json value: %v", err)
 		}
 		if err := json.Unmarshal([]byte(jsonValue), &jsonData); err != nil {
-			log.Fatalf("Unable to unmarshal json value: %v", err)
+			log.Printf("Unable to unmarshal json value: %v", err)
 		}
 	}
 	if err := rows.Err(); err != nil {
-		log.Fatalf("Error reading rows: %v", err)
+		log.Printf("Error reading rows: %v", err)
 	}
 
 	return []byte(jsonValue)
