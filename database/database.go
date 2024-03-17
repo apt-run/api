@@ -70,7 +70,7 @@ func CreateStatsTable() {
 
 func InsertDebianStats() {
 	url := "https://popcon.debian.org/by_inst"
-	filepath := "tmp/by_inst.txt"
+	filepath := "tmp/by_inst"
 
 	if err := os.Mkdir("temp", 0777); err != nil {
 		fmt.Println(err.Error())
