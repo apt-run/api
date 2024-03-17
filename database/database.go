@@ -76,15 +76,14 @@ func InsertDebianStats() {
 	fmt.Println(gcolor.YellowText("Downloading " + url + "..."))
 	err := DownloadFile(filepath, url)
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Fatalf(err.Error())
 	}
 	fmt.Print("	-----> ")
 	fmt.Println(gcolor.GreenText("Finished downloading file :" + filepath))
 
 	file, err := os.Open("tmp/by_inst.txt")
 	if err != nil {
-		fmt.Println(err)
-		os.Exit(1)
+		log.Fatalf(err.Error())
 	}
 	scanner := bufio.NewScanner(file)
 
@@ -154,7 +153,7 @@ func InsertDebianStats() {
 		}),
 	)
 	if err != nil {
-		fmt.Println(err.Error())
+		log.Fatalf(err.Error())
 	}
 
 	fmt.Print("	-----> ")
