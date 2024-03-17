@@ -76,7 +76,7 @@ func InsertDebianStats() {
 		log.Fatalf(err.Error())
 	}
 	fmt.Print("	-----> ")
-	fmt.Println(gcolor.YellowText("Directory created: temp"))
+	fmt.Println(gcolor.YellowText("Directory created: tmp"))
 
 	fmt.Print("	-----> ")
 	fmt.Println(gcolor.YellowText("Downloading " + url + "..."))
