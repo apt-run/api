@@ -3,3 +3,6 @@ bin
 tmp
 
 .venv
+__pycache__
+data.csv
+packages.csv
